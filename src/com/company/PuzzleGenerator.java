@@ -158,17 +158,17 @@ public class PuzzleGenerator {
 			Pattern taskRegex = Pattern.compile("var task = '((\\d?/?)+)(.+); \\$\\(document\\)");
 //			Pattern taskRegex     = Pattern.compile("var task = '(.+)';");
 			Pattern puzzleIDRegex = Pattern.compile("span id=\"puzzleID\">(.+)</span>");
-			String  temp;
+			String  currentLine;
 			System.out.println("Formatting html into board...");
-			while ((temp = reader.readLine()) != null) {
-				Matcher m = puzzleIDRegex.matcher(temp);
-				if (m.find()) {
-					puzzleID = m.group(1);
+			while ((currentLine = reader.readLine()) != null) {
+				Matcher matcher = puzzleIDRegex.matcher(currentLine);
+				if (matcher.find()) {
+					puzzleID = matcher.group(1);
 				}
 
-				m = taskRegex.matcher(temp);
-				if (m.find()) {
-					String match = m.group(1);
+				matcher = taskRegex.matcher(currentLine);
+				if (matcher.find()) {
+					String match = matcher.group(1);
 
 					for (int i = 0; i < match.length(); i++) {
 						if (match.charAt(i) == '/') {
@@ -181,7 +181,7 @@ public class PuzzleGenerator {
 							task.add(0);
 					}
 
-					match = m.group(3);
+					match = matcher.group(3);
 					if (!match.equals("'")) {
 						hasField = true;
 						StringBuilder offset    = new StringBuilder();

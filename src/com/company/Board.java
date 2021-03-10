@@ -30,7 +30,7 @@ public class Board {
 			if (field.get(pos).size() == 1) {
 				int c = field.get(pos).get(0);
 				if (c > top) {
-					visible += 1;
+		 			visible += 1;
 					top = c;
 					if (visible > task)
 						return true;
