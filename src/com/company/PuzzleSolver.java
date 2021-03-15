@@ -4,20 +4,21 @@ import static com.company.Main.stuffsDone;
 import static com.company.PuzzleGenerator.*;
 
 public class PuzzleSolver implements Runnable {
-	Board board;
+	Board      board;
 	Permutator permutator;
 
 	public PuzzleSolver(Board board) {
-		this.board = board;
+		this.board      = board;
 		this.permutator = new Permutator();
 	}
 
 	public PuzzleSolver(Board board, String guessPos, int guess) {
-		this.board = board;
+		this.board      = board;
 		this.permutator = new Permutator();
 		board.assign(guessPos, guess);
 	}
 
+	// TODO: Fix this, sometimes it removes valid members
 	private void resolveRemainingUniques() {
 		for (int i = 0; i < boardSize; i++) {
 			String   pos                = (char) (65 + i) + Integer.toString(i);

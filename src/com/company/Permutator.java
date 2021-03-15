@@ -7,8 +7,6 @@ public class Permutator {
 	ArrayList<ArrayList<Integer>> set          = new ArrayList<>();
 	ArrayList<ArrayList<Integer>> combinations = new ArrayList<>();
 
-	// Input: clue indices and Board
-	// Output: eliminate invalid options from board
 	public Permutator() {}
 
 	public void cleanUpRow(int clueIndex, Board board) {

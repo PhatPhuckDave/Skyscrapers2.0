@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="skyscrapersNew:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/skyscrapersNew_jar</output-path>
+    <root id="archive" name="skyscrapersNew.jar">
+      <element id="module-output" name="skyscrapersNew" />
+    </root>
+  </artifact>
+</component>

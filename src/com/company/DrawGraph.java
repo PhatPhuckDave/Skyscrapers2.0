@@ -23,7 +23,7 @@ public class DrawGraph extends JPanel {
 
 	public static void createAndShowGui(ArrayList<Long> input, double max) {
 		DrawGraph mainPanel = new DrawGraph(input);
-		MAX_SCORE = (long)(max * 1.1);
+		MAX_SCORE = (long) (max * 1.1);
 
 		JFrame frame = new JFrame("DrawGraph");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
