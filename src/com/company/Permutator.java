@@ -40,7 +40,8 @@ public class Permutator {
 				try {if (!tempList.contains(combination.get(i))) tempList.add(combination.get(i));}
 				catch (Exception ignored) {}
 			}
-			board.field.get(clueRow.get(i)).removeIf(e -> !tempList.contains(e));
+//			for (Integer j : board.field.get(clueRow.get(i))) if (!tempList.contains(j)) board.eliminate(clueRow.get(i), j);
+			if (board.field.get(clueRow.get(i)).size() > 1) board.field.get(clueRow.get(i)).removeIf(e -> !tempList.contains(e));
 		}
 
 		set          = new ArrayList<>();

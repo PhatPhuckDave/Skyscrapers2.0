@@ -208,20 +208,22 @@ public class PuzzleGenerator {
 							while (true) {
 								i++;
 								offset.delete(0, offset.length());
-								while (match.charAt(i) >= 97 && match.charAt(i) <= 122) {
-									offset.append(match.charAt(i));
-									i++;
+								if (match.charAt(i) != '_') {
+									while (match.charAt(i) >= 97 && match.charAt(i) <= 122) {
+										offset.append(match.charAt(i));
+										i++;
 
-									if (match.charAt(i) == '\'')
-										throw new StringIndexOutOfBoundsException();
-								}
-								if (offset.length() == 1) {
-									offsetInt += offset.charAt(0) - 96;
-								} else {
-									offsetInt += offset.charAt(0) - 96;
-									offsetInt += offset.charAt(1) - 96;
-								}
+										if (match.charAt(i) == '\'')
+											throw new StringIndexOutOfBoundsException();
+									}
 
+									if (offset.length() == 1) {
+										offsetInt += offset.charAt(0) - 96;
+									} else {
+										offsetInt += offset.charAt(0) - 96;
+										offsetInt += offset.charAt(1) - 96;
+									}
+								} else i++;
 								ArrayList<Integer> iveGotToDoThis = new ArrayList<>();
 								iveGotToDoThis.add((int) match.charAt(i) - 48);
 
@@ -234,18 +236,19 @@ public class PuzzleGenerator {
 					}
 				}
 			}
-			if (!linkSet)
-				PuzzleGenerator.link = "https://www.puzzle-skyscrapers.com/?e=" +
-				                       Base64.getEncoder().encodeToString((sizei + ":" + puzzleID).getBytes());
+			if (!linkSet) PuzzleGenerator.link = "https://www.puzzle-skyscrapers.com/?e=" +
+			                                     Base64.getEncoder().encodeToString((sizei + ":" + puzzleID).getBytes());
 		}
 		catch (IOException e) {
 			System.out.println("oopsie");
 			e.printStackTrace();
 		}
 
+//		System.out.println(field);
 		generateBoard();
 		System.out.println("Board done");
 		System.out.println(PuzzleGenerator.link);
+		Main.startingTime = System.nanoTime();
 	}
 
 	private String offsetToPos(int offset) {

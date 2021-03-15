@@ -9,14 +9,13 @@ import static com.company.PuzzleGenerator.*;
 public class Board {
 	Map<String, ArrayList<Integer>> field         = new HashMap<>();
 	Map<String, Boolean>            assignedField = new HashMap<>();
-	boolean                         solved        = false;
 
 	public Board(PuzzleGenerator startingPuzzle) {
 		importField(startingPuzzle.field);
 		for (String pos : boardMembers) assignedField.put(pos, false);
 	}
 
-	public Board (Board input) {
+	public Board(Board input) {
 		importField(input.field);
 		for (String pos : boardMembers) assignedField.put(pos, false);
 	}
@@ -50,7 +49,7 @@ public class Board {
 		for (int i = 0; i < boardSize; i++) if (checkRow(task.get(i), taskRows.get(i))) return false;
 		for (String pos : boardMembers)
 			if (field.get(pos).size() > 1)
-				System.out.println(field.get(pos));
+				return false;
 		return true;
 	}
 

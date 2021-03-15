@@ -1,43 +1,74 @@
 package com.company;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 // TODO: Maybe try deep copy using toArray
 
 public class Main {
-	static ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(12);
-	static long startingTime;
-	static int boards = 1;
+	static final Thread             mainThread = Thread.currentThread();
+	static       ThreadPoolExecutor executor   = (ThreadPoolExecutor) Executors.newFixedThreadPool(12);
+	static       int                numBoards  = 1;
+	static       long               startingTime;
+	static       Board              solvedBoard;
+	static       Benchmark          benchmark  = new Benchmark();
+	static       ArrayList<Board>   boards     = new ArrayList<>();
 
 	public static void stuffsDone(PuzzleSolver currentSolver) {
 		if (currentSolver.board.isValid() && !currentSolver.board.isDead()) {
-			System.out.println((System.nanoTime() - startingTime) / 1e9);
-			System.out.println(boards);
-			System.out.println(currentSolver.board.printBoard());
-			System.out.println("yaay!");
-			currentSolver.board.isValid();
+			solvedBoard = currentSolver.board;
+			mainThread.interrupt();
 //			executor.shutdownNow();
-			try { executor.awaitTermination(30, TimeUnit.SECONDS); }
-			catch (Exception ignored) {}
 		} else {
 			if (!currentSolver.board.isDead()) {
 				String guess = currentSolver.board.bestGuess();
 				if (!guess.equals(""))
 					for (int i = 0; i < currentSolver.board.field.get(guess).size(); i++) {
-						executor.execute(new Thread(new PuzzleSolver(new Board(currentSolver.board), guess, currentSolver.board.field.get(guess).get(i))));
-						++boards;
+						Board newBoard = new Board(currentSolver.board);
+						executor.execute(new Thread(new PuzzleSolver(newBoard, guess, currentSolver.board.field.get(guess).get(i))));
+						++numBoards;
+						boards.add(newBoard);
 					}
 			}
 		}
 	}
 
-	public static void main(String[] args) {
-		// TODO: See why the below places a 1 in 1, 3 without eliminating it from any others
-//		executor.execute(new PuzzleSolver(new Board(new PuzzleGenerator(7, "https://www.puzzle-skyscrapers.com/?e=NzoyLDM2OSwzOTY="))));
-		startingTime = System.nanoTime();
-//		executor.execute(new PuzzleSolver(new Board(new PuzzleGenerator(8, "https://www.puzzle-skyscrapers.com/?e=ODo3LDMwOSw1MTY="))));
-		executor.execute(new PuzzleSolver(new Board(new PuzzleGenerator(7, "https://www.puzzle-skyscrapers.com/?e=Nzo1LDYyNyw4MDA="))));
+	public static void main(String[] args) throws IOException {
+		benchmark.start(new Board(new PuzzleGenerator(0)), 5000);
+//		executor.execute(new PuzzleSolver(new Board(new PuzzleGenerator(0))));
+
+		do {
+			try {Thread.sleep((long) 1e9);}
+			catch (InterruptedException e) {
+				if (!benchmark.isRunning) {
+					System.out.println((System.nanoTime() - startingTime) / 1e6);
+					System.out.println(numBoards);
+					System.out.println(solvedBoard.printBoard());
+					try {
+						executor.shutdown();
+						System.exit(0);
+					}
+					catch (Exception ignored) {}
+				} else {
+					System.out.println(benchmark.iterationsRemaining);
+					benchmark.benchmarkTimes.add((System.nanoTime() - benchmark.lastStart));
+					if (benchmark.iterationsRemaining > 0)
+						benchmark.startNewBoard();
+					else {
+						benchmark.benchmarkTimes.add((System.nanoTime() - benchmark.lastStart));
+						DrawGraph.createAndShowGui(benchmark.benchmarkTimes, Collections.max(benchmark.benchmarkTimes));
+//						Collections.sort(benchmark.benchmarkTimes);
+						System.out.printf("Average: %.3fms Min: %.3fms Max: %.3fms%n", benchmark.getAverage() / 1e6,
+						                                 Collections.min(benchmark.benchmarkTimes) / 1e6,
+						                                 Collections.max(benchmark.benchmarkTimes) / 1e6);
+						System.in.read();
+						System.exit(0);
+					}
+				}
+			}
+		} while (benchmark.isRunning);
 	}
 }
