@@ -42,17 +42,17 @@ public class PuzzleGenerator {
 	public PuzzleGenerator(boolean ok) {
 		if (ok) {
 			Integer[] temp = {
-					2, 2, 4, 1, 3, 2,
-					3, 2, 1, 5, 3, 3,
-					3, 1, 3, 4, 2, 3,
-					2, 3, 1, 2, 2, 2,
+					1, 2, 4, 4, 2,
+					3, 3, 2, 1, 2,
+					1, 2, 4, 3, 2,
+					3, 3, 1, 3, 2,
 					};
 			Map<String, Integer> entryField = new HashMap<>();
 			task.addAll(Arrays.asList(temp));
 
-			entryField.put("B4", 5);
-			entryField.put("E2", 1);
-			entryField.put("F4", 2);
+//			entryField.put("B4", 5);
+//			entryField.put("E2", 1);
+//			entryField.put("F4", 2);
 
 			for (Map.Entry<String, Integer> entry : entryField.entrySet()) {
 				ArrayList<Integer> tempList = new ArrayList<>();

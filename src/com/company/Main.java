@@ -16,7 +16,7 @@ public class Main {
 	static       long               startingTime;
 	static       Board              solvedBoard;
 	static       Benchmark          benchmark  = new Benchmark();
-	static       ArrayList<Board>   boards     = new ArrayList<>();
+//	static       ArrayList<Board>   boards     = new ArrayList<>();
 
 	public static void stuffsDone(PuzzleSolver currentSolver) {
 		if (currentSolver.board.isValid() && currentSolver.board.isAlive()) {
@@ -31,16 +31,19 @@ public class Main {
 						Board newBoard = new Board(currentSolver.board);
 						executor.execute(new Thread(new PuzzleSolver(newBoard, guess, currentSolver.board.field.get(guess).get(i))));
 						++numBoards;
-						boards.add(newBoard);
+//						System.out.println(newBoard.printBoard());
+//						boards.add(newBoard);
 					}
 			}
 		}
 	}
 
+	public static final String ANSI_GREEN  = "\u001B[32m";
+	public static final String ANSI_RESET  = "\u001B[0m";
+
 	public static void main(String[] args) throws IOException, SQLException {
-		benchmark.start(new Board(new PuzzleGenerator(9)), 5000);
-		// This breaks the program
-//		executor.execute(new PuzzleSolver(new Board(new PuzzleGenerator(8))));
+		benchmark.start(new Board(new PuzzleGenerator(true)), 10000);
+//		executor.execute(new PuzzleSolver(new Board(new PuzzleGenerator(11))));
 
 		do {
 			try {Thread.sleep((long) 1e9);}
@@ -48,7 +51,8 @@ public class Main {
 				if (!benchmark.isRunning) {
 					System.out.printf("%.3fms\n", (System.nanoTime() - startingTime) / 1e6);
 					System.out.println(numBoards);
-					System.out.println(solvedBoard.printBoard());
+					System.out.println(ANSI_GREEN + solvedBoard.printBoard() + ANSI_RESET);
+					System.out.println(solvedBoard.printAll());
 					try {
 						executor.shutdown();
 						System.exit(0);

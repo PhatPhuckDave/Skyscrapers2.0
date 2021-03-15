@@ -9,6 +9,7 @@ import static com.company.PuzzleGenerator.*;
 public class Board {
 	Map<String, ArrayList<Integer>> field         = new HashMap<>();
 	Map<String, Boolean>            assignedField = new HashMap<>();
+	Board                           parentBoard   = null;
 
 	public Board(PuzzleGenerator startingPuzzle) {
 		importField(startingPuzzle.field);
@@ -16,6 +17,7 @@ public class Board {
 	}
 
 	public Board(Board input) {
+		parentBoard = input;
 		importField(input.field);
 		for (String pos : boardMembers) assignedField.put(pos, false);
 	}
@@ -92,7 +94,7 @@ public class Board {
 		}
 	}
 
-	protected String printBoard() {
+	protected synchronized String printBoard() {
 		StringBuilder output      = new StringBuilder();
 		StringBuilder outputSmall = new StringBuilder();
 		for (int i = 0; i < boardSize; i++) {
@@ -105,6 +107,18 @@ public class Board {
 			}
 			output.append("\n");
 		}
+		return output.toString();
+	}
+
+	public String printAll() {
+		StringBuilder output = new StringBuilder();
+
+		Board currentBoard = this;
+		while (currentBoard.parentBoard != null) {
+			output.append(currentBoard.parentBoard.printBoard()).append("\n\n");
+			currentBoard = currentBoard.parentBoard;
+		}
+
 		return output.toString();
 	}
 }

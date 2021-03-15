@@ -7,6 +7,8 @@ public class Permutator {
 	ArrayList<ArrayList<Integer>> set          = new ArrayList<>();
 	ArrayList<ArrayList<Integer>> combinations = new ArrayList<>();
 
+	// Input: clue indices and Board
+	// Output: eliminate invalid options from board
 	public Permutator() {}
 
 	public void cleanUpRow(int clueIndex, Board board) {
@@ -38,8 +40,15 @@ public class Permutator {
 				try {if (!tempList.contains(combination.get(i))) tempList.add(combination.get(i));}
 				catch (Exception ignored) {}
 			}
-//			for (Integer j : board.field.get(clueRow.get(i))) if (!tempList.contains(j)) board.eliminate(clueRow.get(i), j);
-			if (board.field.get(clueRow.get(i)).size() > 1) board.field.get(clueRow.get(i)).removeIf(e -> !tempList.contains(e));
+
+			ArrayList<Integer> toRemove = new ArrayList<>();
+			for (Integer j : board.field.get(clueRow.get(i)))
+				if (!tempList.contains(j))
+					toRemove.add(j);
+			for (Integer j : toRemove)
+				board.eliminate(clueRow.get(i), j);
+
+//			if (board.field.get(clueRow.get(i)).size() > 1) board.field.get(clueRow.get(i)).removeIf(e -> !tempList.contains(e));
 		}
 
 		set          = new ArrayList<>();

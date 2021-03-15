@@ -81,7 +81,8 @@ public class PuzzleSolver implements Runnable {
 		}
 
 		// resolve unique doesn't seem to work right
-//		resolveRemainingUniques();
+		if (!board.isValid())
+			resolveRemainingUniques();
 		stuffsDone(this);
 	}
 }
