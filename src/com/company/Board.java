@@ -53,11 +53,11 @@ public class Board {
 		return true;
 	}
 
-	protected boolean isDead() {
+	protected boolean isAlive() {
 		for (String pos : boardMembers)
 			if (field.get(pos).size() == 0)
-				return true;
-		return false;
+				return false;
+		return true;
 	}
 
 	protected String bestGuess() {

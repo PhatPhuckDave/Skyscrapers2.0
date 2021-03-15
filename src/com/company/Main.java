@@ -18,12 +18,12 @@ public class Main {
 	static       ArrayList<Board>   boards     = new ArrayList<>();
 
 	public static void stuffsDone(PuzzleSolver currentSolver) {
-		if (currentSolver.board.isValid() && !currentSolver.board.isDead()) {
+		if (currentSolver.board.isValid() && currentSolver.board.isAlive()) {
 			solvedBoard = currentSolver.board;
 			mainThread.interrupt();
 //			executor.shutdownNow();
 		} else {
-			if (!currentSolver.board.isDead()) {
+			if (currentSolver.board.isAlive()) {
 				String guess = currentSolver.board.bestGuess();
 				if (!guess.equals(""))
 					for (int i = 0; i < currentSolver.board.field.get(guess).size(); i++) {

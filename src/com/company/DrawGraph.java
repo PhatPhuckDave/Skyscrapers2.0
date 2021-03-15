@@ -5,7 +5,6 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("serial")
 public class DrawGraph extends JPanel {
 	private static final int        PREF_W            = 1200;
 	private static final int        PREF_H            = 650;
@@ -15,8 +14,8 @@ public class DrawGraph extends JPanel {
 	private static final Stroke     GRAPH_STROKE      = new BasicStroke(3f);
 	private static final int        GRAPH_POINT_WIDTH = 1;
 	private static final int        Y_HATCH_CNT       = 10;
-	private static       long     MAX_SCORE         = 8000;
-	private              List<Long> scores;
+	private static       long       MAX_SCORE         = 8000;
+	private final        List<Long> scores;
 
 	public DrawGraph(List<Long> scores) {
 		this.scores = scores;
@@ -43,7 +42,7 @@ public class DrawGraph extends JPanel {
 		double xScale = ((double) getWidth() - 2 * BORDER_GAP) / (scores.size() - 1);
 		double yScale = ((double) getHeight() - 2 * BORDER_GAP) / (MAX_SCORE - 1);
 
-		List<Point> graphPoints = new ArrayList<Point>();
+		List<Point> graphPoints = new ArrayList<>();
 		for (int i = 0; i < scores.size(); i++) {
 			int x1 = (int) (i * xScale + BORDER_GAP);
 			int y1 = (int) ((MAX_SCORE - scores.get(i)) * yScale + BORDER_GAP);
@@ -56,20 +55,17 @@ public class DrawGraph extends JPanel {
 
 		// create hatch marks for y axis.
 		for (int i = 0; i < Y_HATCH_CNT; i++) {
-			int x0 = BORDER_GAP;
 			int x1 = GRAPH_POINT_WIDTH + BORDER_GAP;
 			int y0 = getHeight() - (((i + 1) * (getHeight() - BORDER_GAP * 2)) / Y_HATCH_CNT + BORDER_GAP);
-			int y1 = y0;
-			g2.drawLine(x0, y0, x1, y1);
+			g2.drawLine(BORDER_GAP, y0, x1, y0);
 		}
 
 		// and for x axis
 		for (int i = 0; i < scores.size() - 1; i++) {
 			int x0 = (i + 1) * (getWidth() - BORDER_GAP * 2) / (scores.size() - 1) + BORDER_GAP;
-			int x1 = x0;
 			int y0 = getHeight() - BORDER_GAP;
 			int y1 = y0 - GRAPH_POINT_WIDTH;
-			g2.drawLine(x0, y0, x1, y1);
+			g2.drawLine(x0, y0, x0, y1);
 		}
 
 		Stroke oldStroke = g2.getStroke();
@@ -85,13 +81,10 @@ public class DrawGraph extends JPanel {
 
 		g2.setStroke(oldStroke);
 		g2.setColor(GRAPH_POINT_COLOR);
-		for (int i = 0; i < graphPoints.size(); i++) {
-			int x = graphPoints.get(i).x - GRAPH_POINT_WIDTH / 2;
-			int y = graphPoints.get(i).y - GRAPH_POINT_WIDTH / 2;
-			;
-			int ovalW = GRAPH_POINT_WIDTH;
-			int ovalH = GRAPH_POINT_WIDTH;
-			g2.fillOval(x, y, ovalW, ovalH);
+		for (Point graphPoint : graphPoints) {
+			int x = graphPoint.x;
+			int y = graphPoint.y;
+			g2.fillOval(x, y, GRAPH_POINT_WIDTH, GRAPH_POINT_WIDTH);
 		}
 	}
 

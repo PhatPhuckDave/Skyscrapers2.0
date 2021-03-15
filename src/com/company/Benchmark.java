@@ -13,7 +13,7 @@ public class Benchmark {
 
 	public void start(Board board, int iterationsRemaining) {
 		this.iterationsRemaining = iterationsRemaining;
-		benchmarkTimes           = new ArrayList<Long>();
+		benchmarkTimes           = new ArrayList<>();
 		isRunning                = true;
 		startingBoard            = board;
 		startNewBoard();

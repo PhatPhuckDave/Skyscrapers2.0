@@ -53,7 +53,7 @@ public class PuzzleSolver implements Runnable {
 
 	@Override
 	public void run() {
-		if (!board.isDead()) {
+		if (board.isAlive()) {
 			for (int i = 0; i < task.size(); i++) {
 				if (task.get(i) == 1) {
 					board.assign(taskRows.get(i).get(0), boardSize);
